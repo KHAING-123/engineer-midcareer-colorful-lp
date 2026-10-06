@@ -60,8 +60,8 @@ export const lpContent = {
    */
   hero: {
     title: '未経験から、エンジニアへ。PREAIで一緒に成長しよう。',
-    imagePc: 'hero/rookie-hero-pc.png',
-    imageSp: 'hero/rookie-hero-sp.png',
+    imagePc: 'hero/hero-pc.png',
+    imageSp: 'hero/hero-sp.png',
     alt: '未経験から、エンジニアへ。PREAIで一緒に成長しよう。笑顔で働く若手エンジニアのイラスト',
   },
 
@@ -70,7 +70,7 @@ export const lpContent = {
     number: '01',
     label: 'MEMBERS',
     title: 'どんな人が\n働いている？',
-    lead: 'PREAIには、接客・販売・事務など\nさまざまな業界からエンジニアに挑戦した\n仲間がたくさんいます。\n\nスタートラインはみんな同じ。\n「やってみたい」気持ちを大切にしています。',
+    lead: 'PREAIには、さまざまな経験や強みを持ったメンバーが働いています。\nこれまで培ってきた経験を活かしながら、IT・AIという新しいスキルを身につけ、\nそれぞれのキャリアに挑戦しています。\n\n共通しているのは、\n新しいことを学び、自分の可能性を広げようとする姿勢です。',
     note: '入社メンバーの約7割が\nIT未経験からのスタート！', // ※ 現在のデザインでは表示していません
     handwritten: 'いろんな\nバックグラウンドの\n仲間がいます！', // 左側の手書き風メッセージ
     sideNote: '一歩ずつ、\nできることが\n増えていく。', // 右側のピンクの丸の中のメッセージ
@@ -117,7 +117,7 @@ export const lpContent = {
     number: '02',
     label: 'OUR WORK',
     title: 'PREAIでの仕事',
-    lead: 'お客様の「こうしたい」をITのチカラでカタチにする仕事です。\nまずは得意分野を見つけるところから始めましょう。',
+    lead: 'お客様の課題を整理し、AIやITを活用して解決へ導く仕事です。\nまずはPMOやAI導入支援から経験し、\n将来的には要件定義やプロジェクトマネジメントにも挑戦できます。',
   },
   /*
    * 仕事カード（左から順に表示）
@@ -126,27 +126,27 @@ export const lpContent = {
    */
   jobs: [
     {
-      title: 'Webアプリ開発',
+      title: 'PM・PMO',
       image: 'jobs/web-development.png',
       imageAlt: 'パソコン画面でWebアプリを開発しているイラスト',
-      description: '業務システムやWebサービスの画面・\n機能をつくります。チームで設計から\nリリースまで取り組みます。',
-      tags: ['HTML / CSS', 'JavaScript', 'Vue.js', 'PHP'],
+      description: '大手企業のDX・ITプロジェクトに参画し、\n会議運営、進捗・課題管理、関係者との調整などを担当します。\n経験を積みながら、要件整理や顧客折衝、プロジェクト全体を動かすPM業務へと\nステップアップしていきます。',
+      tags: ['Excel', 'PowerPoint', 'Teams', 'Slack','生成AI'],
       accent: 'yellow',
     },
     {
-      title: 'モバイルアプリ開発',
+      title: 'AI・DXツール導入支援',
       image: 'jobs/mobile-development.png',
       imageAlt: 'スマートフォンアプリの画面を設計しているイラスト',
-      description: 'iOS・Androidアプリを開発します。\nユーザーが毎日使う身近なサービスに\n関われます。',
-      tags: ['Flutter', 'Swift', 'Kotlin', 'Firebase'],
+      description: '大手企業を中心に、生成AIや\n業務効率化ツールの導入・活用を支援します。\nお客様の業務や課題を整理し、ツールの選定・\n導入から、活用方法の検討、現場への\n定着までサポートします。',
+      tags: ['Microsoft Copilot', 'Power Platform（Power Apps等）', 'ChatGPT', 'Claude','Gemini','NotebookLM'],
       accent: 'green',
     },
     {
-      title: 'データ分析・AI開発',
+      title: '業務自動化',
       image: 'jobs/ai-data-development.png',
       imageAlt: 'グラフやAIのデータを分析しているイラスト',
-      description: 'データを集めて分析し、AIモデルを\n活用した仕組みづくりに挑戦します。',
-      tags: ['Python', 'SQL', '機械学習', '生成AI'],
+      description: 'n8nやAIを活用し、これまで人が手作業で\n行っていた業務を自動化します。\n業務フローを整理し、AIや各種サービスを\n組み合わせながら、実際に動く仕組みを\nつくります。',
+      tags: ['n8n', 'Claude Code', 'Codex', 'API連携'],
       accent: 'pink',
     },
   ],
@@ -155,8 +155,8 @@ export const lpContent = {
   growthSection: {
     number: '03',
     label: 'GROWTH STEP',
-    title: '未経験でも安心の\n成長ステップ',
-    lead: '基礎から実践まで、段階的にスキルを\n身につけられる環境があります。',
+    title: '実践から始める、\nPREAIならではの\n成長ステップ',
+    lead: '知識を学ぶだけではなく、\nAI・自動化ツールを実際に作るところからスタート。\n実務経験とキャリア支援を通じて、自分の強みを伸ばしていきます。',
     /* 左側の手書き風メモ（1行目 / 2行目は「強調する言葉」＋「続き」。強調する言葉はコーラル色） */
     note: {
       line1: '未経験から、',
@@ -168,32 +168,32 @@ export const lpContent = {
     {
       step: 'STEP 01',
       period: '入社〜1ヶ月',
-      title: '基礎学習',
-      description: 'ITの基礎知識、プログラミングの基本を研修で学びます。\nPCの使い方からでも大丈夫です。',
+      title: '実践型AI・IT研修',
+      description: 'IT・AIの基礎を学びながら、n8nを使った業務自動化に挑戦。\n実際に自分で自動化ツールを作り、AIを「知っている」だけではなく\n「仕事で使える」状態を目指します。',
       icon: 'icons/growth/growth-basic-learning.png',
       accent: 'yellow',
     },
     {
       step: 'STEP 02',
-      period: '2〜3ヶ月',
-      title: '実践課題',
-      description: '簡単なアプリを実際に作りながら、\nチーム開発の流れやGitの使い方を身につけます。',
+      period: '2ヶ月目〜',
+      title: 'OJT・プロジェクト参加',
+      description: '先輩と一緒に実際のプロジェクトへ参画。\nPMOやAI・DXツールの導入支援など、実務を経験しながら仕事の進め方や\n顧客とのコミュニケーションを身につけます。',
       icon: 'icons/growth/growth-practice.png',
       accent: 'pink',
     },
     {
       step: 'STEP 03',
-      period: '4ヶ月〜',
-      title: 'OJT・\nプロジェクト参加',
-      description: '先輩と一緒に実際のプロジェクトへ参加。\nわからないことはすぐに相談できる環境です。',
+      // period: '4ヶ月〜',
+      title: '定期的なキャリア1on1',
+      description: '専属キャリアコンサルとの1on1を実施。\n現在の経験や強み、目指したいキャリアを整理し、\n次に身につけるスキルや挑戦する仕事を一緒に考えます。',
       icon: 'icons/growth/growth-project.png',
       accent: 'blue',
     },
     {
       step: 'STEP 04',
-      period: '1年目以降',
+      // period: '1年目以降',
       title: '継続的なスキルアップ',
-      description: '新しい技術の勉強会や資格取得を通じて、\n得意分野をどんどん伸ばしていきます。',
+      description: 'AI・ITの学習を継続しながら、要件定義やプロジェクトマネジメント、\nAI活用・業務自動化など、目指すキャリアに必要な専門性を伸ばしていきます。',
       icon: 'icons/growth/growth-skill-up.png',
       accent: 'green',
     },
@@ -203,33 +203,33 @@ export const lpContent = {
   supportSection: {
     number: '04',
     label: 'SUPPORT',
-    title: 'キャリアサポート',
-    lead: 'ひとりで悩まない。成長を支える仕組みがあります。',
+    title: 'AI時代の成長環境',
+    lead: 'PREAIでは、AIを研修だけで終わらせません。\n日々の業務から実際のプロジェクトまで、AIを使い、つくり、活かす環境を整えています。',
     image: 'support/support-mentor-illustration.png',
     imageAlt: '先輩メンターが後輩にパソコン画面を見せながら教えているイラスト',
   },
   supportItems: [
     {
-      title: 'メンター制度',
-      description: '年の近い先輩がメンターとしてつき、仕事の進め方から日々の悩みまで相談にのります。',
+      title: 'AIツール費用を会社負担',
+      description: '必要なAIツールを、会社負担で利用できます。ChatGPTやClaude、Codexなど、\n業務や本人のスキルに合わせて必要なAIツール・プランを会社が負担。新しいツールも積極的に取り入れています。',
       icon: 'icons/support/support-mentor.png',
       accent: 'pink',
     },
     {
-      title: '研修・学習環境',
-      description: 'オンライン教材や書籍購入を会社がサポート。業務時間内の学習時間も確保しています。',
+      title: 'AIを日常業務で活用',
+      description: 'AIは、特別なものではなく日々の仕事の一部です。情報収集や資料作成、アイデア整理、議事録、分析など、さまざまな業務でAIを活用。実務を通じて、AIを使いこなす力を身につけます。',
       icon: 'icons/support/support-learning.png',
       accent: 'blue',
     },
     {
-      title: 'キャリア相談',
-      description: '定期的な1on1面談で、目指したい方向や次のステップを一緒に考えます。',
+      title: 'AIで実際につくる',
+      description: '使うだけでなく、AIを活用して仕組みをつくります。n8nやClaude Code、Codexなどを活用し、業務自動化やツール開発に挑戦。自分で考え、実際に動くものをつくる経験を積めます。',
       icon: 'icons/support/support-consultation.png',
       accent: 'yellow',
     },
     {
-      title: '資格取得支援',
-      description: '基本情報技術者などの受験費用を会社が負担。合格時にはお祝い金もあります。',
+      title: 'AI・DX案件を経験',
+      description: '学んだスキルを、実際のプロジェクトで活かします。大手企業を中心としたAI・DXプロジェクトに参画。Microsoft CopilotやPower Platformなどの導入・活用支援を通じて、AIをビジネスの現場で活かす経験を積みます。',
       icon: 'icons/support/support-certification.png',
       accent: 'green',
     },
@@ -254,32 +254,32 @@ export const lpContent = {
   },
   careers: [
     {
-      title: '開発エンジニア',
-      description: 'Web・モバイルの設計から\n実装まで幅広く担当',
+      title: 'PM・プロジェクトマネージャー',
+      description: '顧客やチームと連携\nしながら、プロジェクト\n全体を推進する。',
       icon: 'icons/career/career-developer.png',
       accent: 'yellow',
     },
     {
-      title: 'データエンジニア',
-      description: 'データ基盤を整え、\n活用できる形に整理',
+      title: 'ITコンサルタント',
+      description: 'お客様の課題を整理し、\nITを活用した解決策を \n企画・提案する。',
       icon: 'icons/career/career-data-engineer.png',
       accent: 'blue',
     },
     {
-      title: 'AIエンジニア',
-      description: '機械学習・生成AIを使った\n仕組みを開発',
+      title: 'AI・DXプロジェクトリーダー',
+      description: 'AI・DX導入プロジェクトの\n中心となり、顧客・エンジニアを巻き込みながら導入を推進する。',
       icon: 'icons/career/career-ai-engineer.png',
       accent: 'green',
     },
     {
-      title: 'プロジェクトリーダー',
-      description: 'チームをまとめ、\n開発をリード',
+      title: 'AI・自動化エンジニア',
+      description: 'n8nやClaude Codeなどを活用し、\nAIを組み込んだ業務自動化や仕組みをつくる。',
       icon: 'icons/career/career-project-leader.png',
       accent: 'pink',
     },
     {
-      title: 'PM・上流工程',
-      description: 'お客様と要件を決め、\nプロジェクトを成功へ導く',
+      title: 'AIコンサルタント',
+      description: '業務課題を分析し、\n生成AIやAIツールを活用した業務改善を提案する。',
       icon: 'icons/career/career-project-manager.png',
       accent: 'yellow',
     },
@@ -290,7 +290,7 @@ export const lpContent = {
     number: '06',
     label: 'INTERVIEW',
     title: '面接について',
-    lead: '面接は「見極める場」ではなく「お互いを知る場」です。\n緊張せず、ありのままのあなたを教えてください。',
+    lead: '面接は応募を強く促すCTAではなく、\n『まずは面接で、仕事内容や会社について詳しく話を聞いてみてください』\nというクローズドLP向けのトーンにする。',
     image: 'interview/interview-conversation-illustration.png',
     imageAlt: '面接官と応募者が笑顔で会話しているイラスト',
     note: 'リラックスして\nお話ください。', // イラストの右下に添える手書き風メモ（\n で改行）
@@ -302,25 +302,25 @@ export const lpContent = {
     topics: [
       {
         title: 'あなたらしさについて',
-        description: '得意なことや大切にしている\nことを教えてください。',
+        description: '社会人経験者向けに\n『これまでの経験・強み』\nについて話す内容へ。',
         icon: 'icons/interview/interview-learning.svg',
         accent: 'green',
       },
       {
         title: 'チームでの働き方\nについて',
-        description: '周りの人とどのように\n関わって仕事をしたいかを\nお聞きします。',
+        description: '『これまでどんな仕事・\n役割を経験してきたか』など、\n社会人経験を確認する内容へ。',
         icon: 'icons/interview/interview-career.svg',
         accent: 'pink',
       },
       {
         title: '仕事への向き合い方\nについて',
-        description: '仕事をするうえで\n大切にしたいことを\n教えてください。',
+        description: '『今後どんなキャリアを\n築きたいか／IT・AI領域で\n何をやってみたいか』を話す\n内容へ。',
         icon: 'icons/interview/interview-idea.svg',
         accent: 'blue',
       },
       {
         title: '気になること・\n聞いてみたいこと',
-        description: '仕事内容や働き方など、\n何でも質問してください。',
+        description: '仕事内容・働き方・案件・\nキャリアなど、応募者側から\n自由に質問できる内容は残す。',
         icon: 'icons/interview/interview-talk.svg',
         accent: 'yellow',
       },
@@ -354,7 +354,7 @@ export const lpContent = {
   selectionFlow: [
     {
       title: '書類選考',
-      duration: '1〜2日',
+      duration: '1日',
       description: '応募フォームからエントリー',
       icon: 'icons/selection/selection-document.png',
       circle: 'blue',
@@ -368,14 +368,14 @@ export const lpContent = {
     },
     {
       title: '面接',
-      duration: '1〜2日',
+      duration: '1日',
       description: '現場メンバーとの面接（1〜2回）',
       icon: 'icons/selection/selection-interview.png',
       circle: 'sky',
     },
     {
       title: '条件確認',
-      duration: '1〜2日',
+      duration: '1日',
       description: '勤務条件や入社日のすり合わせ',
       icon: 'icons/selection/selection-conditions.png',
       circle: 'lavender',
@@ -412,16 +412,18 @@ export const lpContent = {
 
   /* ---------- フッター ---------- */
   footer: {
+    // external: true → 新しいタブで開き、右側に外部リンクアイコンを表示
     links: [
-      { label: '利用規約', href: 'https://example.com/terms' },
+      { label: '会社概要', href: 'https://www.preai.co.jp/company/', external: true },
       { label: 'プライバシーポリシー', href: 'https://example.com/privacy' },
-      { label: '採用に関するお問い合わせ', href: 'https://example.com/contact' },
+      { label: '利用規約', href: 'https://example.com/terms' },
+      // { label: '採用に関するお問い合わせ', href: 'https://example.com/contact' },
     ],
-    sns: [
-      { label: 'X（旧Twitter）', href: 'https://x.com/', icon: 'icons/sns/sns-x.png' },
-      { label: 'Instagram', href: 'https://www.instagram.com/', icon: 'icons/sns/sns-instagram.png' },
-      { label: 'YouTube', href: 'https://www.youtube.com/', icon: 'icons/sns/sns-youtube.png' },
-    ],
-    copyright: '© PREAI Inc. All Rights Reserved.',
+    // sns: [
+    //   { label: 'X（旧Twitter）', href: 'https://x.com/', icon: 'icons/sns/sns-x.png' },
+    //   { label: 'Instagram', href: 'https://www.instagram.com/', icon: 'icons/sns/sns-instagram.png' },
+    //   { label: 'YouTube', href: 'https://www.youtube.com/', icon: 'icons/sns/sns-youtube.png' },
+    // ],
+    copyright: '© 株式会社PREAI. All Rights Reserved.',
   },
 }
