@@ -1,0 +1,75 @@
+/* ============================================================
+   アイコンの Premium 表現（03 GROWTH / 04 SUPPORT / 05 CAREER / 06 INTERVIEW で共通）
+   ------------------------------------------------------------
+   使い方（アイコンの丸の中）：
+     <span class="premium-icon-glow" aria-hidden="true"></span>   … 後ろの淡い光（ゆっくり呼吸）
+     <img class="premium-icon-float" :style="{ '--pi-delay': … }"> … 画像本体（ゆっくり浮遊＋形に沿った影）
+   ・色は親で --pi-color に各カードのテーマ色を指定（未指定は黄色）
+   ・丸（親）の既存アニメーションとは別の要素で動かすので競合しない
+   ・浮遊量は --pi-y（丸自体がすでに動くセクションは小さめに指定）
+   ============================================================ */
+.premium-icon-host {
+  position: relative;
+  isolation: isolate; /* 光を丸の背景より前・画像より後ろに置く */
+}
+.premium-icon-glow {
+  position: absolute;
+  z-index: -1;
+  inset: 4%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--pi-color, #f5c84c) 32%, transparent), transparent 72%);
+  pointer-events: none;
+  animation: pi-glow-pulse 6.4s ease-in-out var(--pi-delay, 0s) infinite;
+}
+.premium-icon-float {
+  position: relative;
+  /* 画像の形に沿った、テーマ色を含む柔らかい影 */
+  filter:
+    drop-shadow(0 6px 8px color-mix(in srgb, var(--pi-color, #f5c84c) 30%, rgba(30, 55, 90, 0.1)))
+    drop-shadow(0 2px 3px rgba(30, 55, 90, 0.08));
+  animation: pi-float var(--pi-dur, 5.4s) ease-in-out var(--pi-delay, 0s) infinite;
+  transition:
+    translate 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    scale 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 0.35s ease;
+}
+@keyframes pi-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(var(--pi-y, -5px)); }
+}
+@keyframes pi-glow-pulse {
+  0%, 100% { transform: scale(0.96); opacity: 0.75; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+/* PC hover（カードに付ける）：画像が少しだけ上がり、影が少し強くなる（浮遊の transform とは別プロパティ） */
+@media (hover: hover) and (pointer: fine) {
+  .premium-icon-hover:hover .premium-icon-float {
+    translate: 0 -2px;
+    scale: 1.03;
+    filter:
+      drop-shadow(0 9px 12px color-mix(in srgb, var(--pi-color, #f5c84c) 40%, rgba(30, 55, 90, 0.12)))
+      drop-shadow(0 3px 5px rgba(30, 55, 90, 0.1));
+  }
+}
+/* SP：動き・影を控えめに */
+@media (max-width: 767px) {
+  .premium-icon-float {
+    --pi-y: var(--pi-y-sp, -3px);
+    filter:
+      drop-shadow(0 4px 6px color-mix(in srgb, var(--pi-color, #f5c84c) 24%, rgba(30, 55, 90, 0.08)))
+      drop-shadow(0 1px 2px rgba(30, 55, 90, 0.06));
+  }
+  .premium-icon-glow {
+    opacity: 0.8;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .premium-icon-float,
+  .premium-icon-glow {
+    animation: none;
+  }
+  .premium-icon-hover:hover .premium-icon-float {
+    translate: none;
+    scale: 1;
+  }
+}

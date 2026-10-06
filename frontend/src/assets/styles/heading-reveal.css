@@ -1,0 +1,78 @@
+/* ============================================================
+   セクションタイトルの Scroll Animation（useHeadingReveal と一緒に使う）
+   ------------------------------------------------------------
+   .heading-reveal-scope      … セクション。表示状態のクラスが付く
+     .is-heading-in           … タイトルが画面に入った（1回だけ）
+     .is-content-ready        … タイトル表示の少し後。本文・カードの v-reveal を解放
+   .heading-reveal            … タイトルグループ（左から）。--right を付けると右から
+   .heading-reveal__item      … 横からスッと入る要素（番号 / 英字ラベル / 見出し）
+     --late                   … 見出しだけごく僅かに遅らせる
+   .heading-reveal-content    … タイトルの後に表示する既存 v-reveal 要素
+     --card / --note          … さらに少し後ろへ（本文 → カード → Note の順）
+   ・移動は translate プロパティ（要素自身の transform を崩さない）
+   ・要素の最終的な不透明度が 1 でない場合は --hr-opacity で指定
+   ============================================================ */
+:root {
+  --hr-dist: 70px; /* 移動距離 */
+  --hr-dur: 0.85s; /* 移動の時間 */
+  --hr-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (max-width: 767px) {
+  :root {
+    --hr-dist: 40px;
+    --hr-dur: 0.75s;
+  }
+}
+/* 方向：左から（標準）／右から */
+.heading-reveal {
+  --hr-x: calc(var(--hr-dist) * -1);
+}
+.heading-reveal--right {
+  --hr-x: var(--hr-dist);
+}
+
+.reveal-ready .heading-reveal-scope .heading-reveal__item {
+  opacity: 0;
+  translate: var(--hr-x) 0;
+  transition:
+    opacity 0.7s ease-out var(--hr-delay, 0ms),
+    translate var(--hr-dur) var(--hr-ease) var(--hr-delay, 0ms);
+}
+.heading-reveal__item--late {
+  --hr-delay: 120ms;
+}
+.reveal-ready .heading-reveal-scope.is-heading-in .heading-reveal__item {
+  opacity: var(--hr-opacity, 1);
+  translate: 0 0;
+}
+
+/* 本文・カードなど：.is-content-ready が付くまでは、画面に入っても隠したまま */
+.reveal-ready .heading-reveal-scope:not(.is-content-ready) .heading-reveal-content.is-revealed {
+  opacity: 0;
+}
+.reveal-ready .heading-reveal-scope:not(.is-content-ready) .heading-reveal-content.is-revealed:not(.reveal--fade) {
+  transform: translate3d(0, var(--reveal-y), 0);
+}
+/* 横から表示する v-reveal（variant: left / right）は、その向きのまま待たせる */
+.reveal-ready .heading-reveal-scope:not(.is-content-ready) .heading-reveal-content.is-revealed.reveal--left {
+  transform: translate3d(calc(var(--reveal-x) * -1), 0, 0);
+}
+.reveal-ready .heading-reveal-scope:not(.is-content-ready) .heading-reveal-content.is-revealed.reveal--right {
+  transform: translate3d(var(--reveal-x), 0, 0);
+}
+.heading-reveal-content--card {
+  --hr-seq: 150ms;
+}
+.heading-reveal-content--note {
+  --hr-seq: 200ms;
+}
+.reveal-ready .heading-reveal-content.reveal {
+  transition-delay: calc(var(--reveal-base, 0ms) * var(--reveal-base-scale) + var(--reveal-i, 0) * var(--reveal-step) + var(--hr-seq, 0ms));
+}
+
+/* 動きを減らす設定：移動なし・不透明度だけ（フェードは useHeadingReveal の Web Animations API で実行） */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-ready .heading-reveal-scope .heading-reveal__item {
+    translate: none;
+  }
+}

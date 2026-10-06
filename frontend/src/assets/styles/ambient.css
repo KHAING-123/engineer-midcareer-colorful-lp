@@ -1,0 +1,294 @@
+/* ============================================================
+   Premium Ambient Background（ページ全体の背景アニメーション）
+   ------------------------------------------------------------
+   ・AmbientBackground.vue がページ末尾に置く1枚のレイヤーです。
+   ・重なり順：各セクションの背景 → このレイヤー(z-index 0) → 本文(.lp-container: z-index 1)
+     （セクションは z-index を持たないため、背景より上・本文より下に描画されます）
+   ・動かすのは transform / opacity / translate / rotate / scale のみ。blur は静的に設定。
+   ・強さの調整：--ambient-strength（濃さの倍率）/ --ambient-amp（動く距離の倍率）
+   ============================================================ */
+
+.lp-page {
+  --leaf-amp: 1; /* 葉っぱの揺れ幅の倍率（SPで弱める） */
+  position: relative;
+  isolation: isolate;
+}
+
+.ambient {
+  --ambient-strength: 1;
+  --ambient-amp: 1;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden; /* はみ出したOrbで横スクロールを出さない */
+  pointer-events: none;
+}
+.ambient * {
+  pointer-events: none;
+}
+
+/* ---------- Orb：色のかたまり（中心をしっかり、外側へ柔らかく） ---------- */
+.ambient-orb {
+  --size: 440px;
+  --alpha: 0.2;
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  margin-top: calc(var(--size) / -2); /* top は光の中心位置 */
+  border-radius: 50%;
+  /* 「色の丸」ではなく光に見えるよう、芯を小さく・外側へなだらかに消す */
+  background: radial-gradient(closest-side, var(--orb-color) 0%, color-mix(in srgb, var(--orb-color) 70%, transparent) 30%,
+    color-mix(in srgb, var(--orb-color) 25%, transparent) 65%, transparent 100%);
+  opacity: calc(var(--alpha) * var(--ambient-strength));
+  will-change: transform;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate; /* 往復させて、ループの切れ目を出さない */
+}
+/* Organic Blob：不定形＋静的な blur（形のアニメーションはしない） */
+.ambient-orb--blob {
+  background: var(--orb-color);
+  border-radius: 55% 45% 60% 40% / 45% 60% 40% 55%;
+  filter: blur(56px);
+}
+.ambient-orb--yellow { --orb-color: var(--color-yellow); animation-name: ambient-float-yellow; }
+.ambient-orb--pink   { --orb-color: var(--color-pink);   animation-name: ambient-float-pink; }
+.ambient-orb--green  { --orb-color: var(--color-green);  animation-name: ambient-float-green; }
+.ambient-orb--blue   { --orb-color: var(--color-blue);   animation-name: ambient-float-blue; }
+
+/* 色ごとに違う「斜めに漂う」軌道（PC：X 40〜75px / Y 30〜60px） */
+@keyframes ambient-float-pink {
+  0%   { transform: translate3d(calc(-20px * var(--ambient-amp)), calc(10px * var(--ambient-amp)), 0) scale(1); }
+  35%  { transform: translate3d(calc(45px * var(--ambient-amp)), calc(-35px * var(--ambient-amp)), 0) scale(1.05); }
+  70%  { transform: translate3d(calc(65px * var(--ambient-amp)), calc(30px * var(--ambient-amp)), 0) scale(0.98); }
+  100% { transform: translate3d(calc(-10px * var(--ambient-amp)), calc(45px * var(--ambient-amp)), 0) scale(1.03); }
+}
+@keyframes ambient-float-green {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  30%  { transform: translate3d(calc(-55px * var(--ambient-amp)), calc(25px * var(--ambient-amp)), 0) scale(1.04); }
+  65%  { transform: translate3d(calc(-30px * var(--ambient-amp)), calc(60px * var(--ambient-amp)), 0) scale(0.97); }
+  100% { transform: translate3d(calc(40px * var(--ambient-amp)), calc(35px * var(--ambient-amp)), 0) scale(1.02); }
+}
+@keyframes ambient-float-yellow {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  35%  { transform: translate3d(calc(50px * var(--ambient-amp)), calc(40px * var(--ambient-amp)), 0) scale(1.05); }
+  70%  { transform: translate3d(calc(75px * var(--ambient-amp)), calc(-20px * var(--ambient-amp)), 0) scale(1); }
+  100% { transform: translate3d(calc(20px * var(--ambient-amp)), calc(-45px * var(--ambient-amp)), 0) scale(0.97); }
+}
+@keyframes ambient-float-blue {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  30%  { transform: translate3d(calc(-40px * var(--ambient-amp)), calc(-30px * var(--ambient-amp)), 0) scale(1.03); }
+  65%  { transform: translate3d(calc(30px * var(--ambient-amp)), calc(-55px * var(--ambient-amp)), 0) scale(0.98); }
+  100% { transform: translate3d(calc(55px * var(--ambient-amp)), calc(20px * var(--ambient-amp)), 0) scale(1.04); }
+}
+
+/*
+ * 配置：top は各セクションの開始位置（--y-xxx：AmbientBackground.vue が計測）からの距離。
+ * 隣り合うセクションで光を共有するように境界付近にも置いています。
+ * 各Orbは 60〜70% 程度が画面内に入る位置。Hero画像・Final CTA画像にはかけていません。
+ */
+/* 01：pink（Organic Blob） */
+.ambient-orb--a { --size: clamp(320px, 30vw, 520px); --alpha: 0.22;
+  top: calc(var(--y-members, 8%) + 300px); left: -7%; animation-duration: 22s; animation-delay: -4s; }
+/* 01 → 02 の境界：green */
+.ambient-orb--b { --size: clamp(360px, 34vw, 580px); --alpha: 0.2;
+  top: var(--y-jobs, 16%); right: -9%; animation-duration: 26s; animation-delay: -10s; }
+/* 02：yellow */
+.ambient-orb--c { --size: clamp(300px, 28vw, 500px); --alpha: 0.24;
+  top: calc(var(--y-jobs, 16%) + 560px); left: -6%; animation-duration: 18s; animation-delay: -7s; }
+/* 03：blue */
+.ambient-orb--d { --size: clamp(320px, 30vw, 520px); --alpha: 0.2;
+  top: calc(var(--y-growth, 30%) + 380px); right: -4%; animation-duration: 20s; animation-delay: -3s; }
+/* 03 → 04 の境界：pink */
+.ambient-orb--e { --size: clamp(300px, 28vw, 480px); --alpha: 0.2;
+  top: var(--y-support, 45%); left: 6%; animation-duration: 24s; animation-delay: -15s; }
+/* 04：yellow（Organic Blob） */
+.ambient-orb--f { --size: clamp(300px, 28vw, 500px); --alpha: 0.22;
+  top: calc(var(--y-support, 45%) + 420px); right: -6%; animation-duration: 21s; animation-delay: -9s; }
+/* 05：green（Organic Blob） */
+.ambient-orb--g { --size: clamp(340px, 32vw, 560px); --alpha: 0.19;
+  top: calc(var(--y-careers, 60%) + 200px); left: -8%; animation-duration: 23s; animation-delay: -12s; }
+/* 05 → 06 の境界：blue */
+.ambient-orb--h { --size: clamp(280px, 26vw, 460px); --alpha: 0.18;
+  top: var(--y-interview, 72%); right: -6%; animation-duration: 25s; animation-delay: -6s; }
+/* 06：pink */
+.ambient-orb--i { --size: clamp(280px, 26vw, 440px); --alpha: 0.2;
+  top: calc(var(--y-interview, 72%) + 420px); left: 30%; animation-duration: 22s; animation-delay: -17s; }
+/* 07：yellow */
+.ambient-orb--j { --size: clamp(300px, 28vw, 480px); --alpha: 0.22;
+  top: calc(var(--y-selection, 82%) + 220px); left: -6%; animation-duration: 19s; animation-delay: -11s; }
+/* 07 → Final CTA の手前：pink（画像には重ねない） */
+.ambient-orb--k { --size: clamp(280px, 26vw, 440px); --alpha: 0.2;
+  top: calc(var(--y-entry, 90%) - 260px); right: 8%; animation-duration: 24s; animation-delay: -8s; }
+/* Footer：very subtle blue */
+.ambient-orb--l { --size: clamp(220px, 22vw, 340px); --alpha: 0.12;
+  top: calc(var(--y-footer, 97%) + 200px); right: -4%; animation-duration: 27s; animation-delay: -13s; }
+
+/* ---------- Soft Light Sweep（2層）：Header〜Footerまで幅の広い淡い光が流れる ---------- */
+/*
+ * ページ全体の高さがある帯なので、グラデーションは横方向（帯の左右の端で完全に透明）にし、
+ * skewX で斜めに傾けて「斜めに流れる光」に見せる（端に直線の境目が出ない）。
+ * マスク：Hero画像の上は25%、Final CTA画像〜Footerは30〜50%に弱める。
+ */
+.ambient-sweep {
+  --sweep-strength: 1;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 55%;
+  opacity: var(--sweep-strength);
+  -webkit-mask-image: var(--sweep-mask);
+  mask-image: var(--sweep-mask);
+  will-change: transform;
+}
+.ambient {
+  --sweep-mask: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.25) 0,
+      rgba(0, 0, 0, 0.25) calc(var(--y-members, 7%) - 80px),
+      #000 calc(var(--y-members, 7%) + 160px),
+      #000 calc(var(--y-entry, 88%) - 160px),
+      rgba(0, 0, 0, 0.3) var(--y-entry, 88%),
+      rgba(0, 0, 0, 0.3) var(--y-footer, 97%),
+      rgba(0, 0, 0, 0.5) 100%);
+}
+/* Light A：Warm Yellow → Soft Pink（左 → 右） */
+.ambient-sweep--a {
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 226, 160, 0.14) 36%,
+    rgba(255, 200, 212, 0.12) 56%, transparent 100%);
+  animation: ambient-sweep-a 22s ease-in-out infinite;
+}
+/* Light B：Blue → Green（右 → 左、別速度） */
+.ambient-sweep--b {
+  width: 48%;
+  background: linear-gradient(90deg, transparent 0%, rgba(180, 216, 245, 0.13) 40%,
+    rgba(186, 232, 208, 0.12) 60%, transparent 100%);
+  animation: ambient-sweep-b 31s ease-in-out -9s infinite;
+}
+@keyframes ambient-sweep-a {
+  0% { transform: translate3d(-110%, -40px, 0) skewX(-16deg); }
+  50% { transform: translate3d(60%, 10px, 0) skewX(-14deg); }
+  100% { transform: translate3d(220%, 40px, 0) skewX(-16deg); }
+}
+@keyframes ambient-sweep-b {
+  0% { transform: translate3d(240%, 30px, 0) skewX(12deg); }
+  50% { transform: translate3d(90%, -20px, 0) skewX(10deg); }
+  100% { transform: translate3d(-120%, -40px, 0) skewX(12deg); }
+}
+
+/* ---------- 既存の葉っぱ（4枚）：茎側を軸に、1枚ずつ違う軌道で揺れる ---------- */
+/* transform は各セクションで使っているため、個別プロパティ translate / rotate で重ねる */
+.members__deco--leaf-l,
+.members__deco--leaf-r,
+.jobs__leaf,
+.careers__leaf {
+  transform-origin: 50% 90%;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+.members__deco--leaf-l { animation-name: ambient-leaf-a; animation-duration: 9.5s; animation-delay: -2s; }
+.members__deco--leaf-r { animation-name: ambient-leaf-b; animation-duration: 12s; animation-delay: -6s; }
+.jobs__leaf            { animation-name: ambient-leaf-c; animation-duration: 10.8s; animation-delay: -4s; }
+.careers__leaf         { animation-name: ambient-leaf-d; animation-duration: 13.5s; animation-delay: -8s; }
+/* PC：X 8〜18px / Y 12〜24px / rotate -4〜+5deg（--leaf-amp で SP は約65%） */
+@keyframes ambient-leaf-a {
+  0%, 100% { translate: 0 0; rotate: -2deg; }
+  30% { translate: calc(10px * var(--leaf-amp)) calc(-14px * var(--leaf-amp)); rotate: 3deg; }
+  65% { translate: calc(-6px * var(--leaf-amp)) calc(-22px * var(--leaf-amp)); rotate: -4deg; }
+}
+@keyframes ambient-leaf-b {
+  0%, 100% { translate: 0 0; rotate: 1deg; }
+  35% { translate: calc(-12px * var(--leaf-amp)) calc(-18px * var(--leaf-amp)); rotate: -3deg; }
+  70% { translate: calc(8px * var(--leaf-amp)) calc(-12px * var(--leaf-amp)); rotate: 4deg; }
+}
+@keyframes ambient-leaf-c {
+  0%, 100% { translate: 0 0; rotate: -1deg; }
+  40% { translate: calc(16px * var(--leaf-amp)) calc(-20px * var(--leaf-amp)); rotate: 5deg; }
+  75% { translate: calc(6px * var(--leaf-amp)) calc(-8px * var(--leaf-amp)); rotate: -2deg; }
+}
+@keyframes ambient-leaf-d {
+  0%, 100% { translate: 0 0; rotate: 2deg; }
+  30% { translate: calc(-8px * var(--leaf-amp)) calc(-24px * var(--leaf-amp)); rotate: -4deg; }
+  60% { translate: calc(18px * var(--leaf-amp)) calc(-14px * var(--leaf-amp)); rotate: 3deg; }
+}
+
+/* ---------- 既存のドット（3つだけ）：静かな呼吸（タイミングをずらす） ---------- */
+.members__deco--dots,
+.support__dots,
+.interview__dots {
+  animation: ambient-breathe 5.8s ease-in-out infinite;
+}
+.members__deco--dots { animation-duration: 4.6s; }
+.interview__dots { animation-duration: 6.6s; animation-delay: -3s; }
+@keyframes ambient-breathe {
+  0%, 100% { opacity: 0.25; scale: 1; }
+  50% { opacity: 0.65; scale: 1.05; }
+}
+
+/* ---------- Footer：背景の光より文字を前面に（レイアウトは変えない） ---------- */
+.site-footer > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width: 1024px) {
+  .ambient {
+    --ambient-amp: 0.75;
+  }
+}
+
+/* ---------- SP：Glow は3個・PCの約65%の濃さ、Light は少し弱く、葉っぱは約65%の揺れ ---------- */
+@media (max-width: 767px) {
+  .lp-page {
+    --leaf-amp: 0.65;
+  }
+  .ambient {
+    --ambient-strength: 0.65;
+    --ambient-amp: 0.45; /* X 約18〜34px / Y 約14〜27px */
+  }
+  .ambient-orb {
+    will-change: auto;
+    display: none;
+  }
+  /* SPではblurを使わず、グラデーションの光だけを表示（軽量化） */
+  .ambient-orb--a,
+  .ambient-orb--d,
+  .ambient-orb--g {
+    display: block;
+    --size: 280px;
+    filter: none;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, var(--orb-color) 0%, color-mix(in srgb, var(--orb-color) 70%, transparent) 30%,
+      color-mix(in srgb, var(--orb-color) 25%, transparent) 65%, transparent 100%);
+  }
+  .ambient-orb--a { left: -25%; }
+  .ambient-orb--d { right: -25%; }
+  .ambient-orb--g { left: -25%; }
+  .ambient-sweep {
+    --sweep-strength: 0.75;
+    width: 90%;
+  }
+}
+
+/* ---------- 動きを減らす設定のときだけ停止（配置はそのまま残る） ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-orb,
+  .ambient-sweep,
+  .members__deco--leaf-l,
+  .members__deco--leaf-r,
+  .jobs__leaf,
+  .careers__leaf,
+  .members__deco--dots,
+  .support__dots,
+  .interview__dots {
+    animation: none !important;
+  }
+  .ambient-orb,
+  .ambient-sweep {
+    will-change: auto;
+  }
+  .ambient-sweep {
+    display: none;
+  }
+}

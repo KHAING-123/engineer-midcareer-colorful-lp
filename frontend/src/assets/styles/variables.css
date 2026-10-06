@@ -1,0 +1,84 @@
+/* ============================================================
+   デザイン共通値（ここを変えるとサイト全体に反映されます）
+   ============================================================ */
+:root {
+  /* ---- 色 ---- */
+  --color-navy: #1f2d5a;        /* 見出し・本文の濃い色 */
+  --color-navy-soft: #3d4a73;   /* 本文（少し薄め） */
+  --color-text: #33405f;
+  --color-text-muted: #5f6886;
+  --color-coral: #f26b5b;       /* セクション番号・アクセント */
+  --color-coral-dark: #d9503f;
+
+  --color-yellow: #ffd95a;      /* CTAボタン */
+  --color-yellow-dark: #f5c52b;
+  --color-yellow-pale: #fff4c7;
+  --color-pink: #ff9fa5;
+  --color-pink-pale: #ffe7e8;
+  --color-green: #8fd19e;
+  --color-green-pale: #e5f5e2;
+  --color-blue: #8fbdf0;
+  --color-blue-pale: #e4f0ff;
+
+  --color-cream: #fffaf0;       /* 基本背景（アイボリー） */
+  --color-cream-deep: #fdf3df;
+  --color-white: #ffffff;
+  --color-border: #ece6d8;
+
+  /* ---- フォント ---- */
+  --font-base: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+  --font-heading: 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', 'Noto Sans JP', sans-serif;
+  --font-number: 'Zen Maru Gothic', 'Arial Rounded MT Bold', sans-serif;
+  --font-hand: 'Caveat', 'Zen Maru Gothic', cursive;
+
+  --fs-xs: 0.75rem;     /* 12px */
+  --fs-sm: 0.875rem;    /* 14px */
+  --fs-base: 1rem;      /* 16px */
+  --fs-md: 1.125rem;    /* 18px */
+  --fs-lg: 1.375rem;    /* 22px */
+  --fs-xl: clamp(1.625rem, 1.2rem + 1.6vw, 2.375rem);     /* セクション見出し */
+  --fs-number: clamp(3.5rem, 2.6rem + 3.4vw, 5.5rem);     /* セクション番号 */
+
+  --lh-base: 1.85;
+  --lh-tight: 1.4;
+
+  /* ---- レイアウト ---- */
+  --container-width: 1200px;
+  --layout-wide-width: 1440px;  /* ヘッダー内側と同じ。Hero / Final CTA 画像の最大幅 */
+  --container-padding: clamp(16px, 4vw, 40px);
+  --header-height: 76px;    /* PC。1080px以下は 72px、600px以下は 60px */
+
+  /* ---- 余白 ---- */
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 40px;
+  --space-xl: 64px;
+  --section-padding: clamp(64px, 5vw + 40px, 120px);
+  --section-padding-top-heading: clamp(40px, 2vw + 32px, 62px); /* タイトルを上寄せするセクションの上余白（01 / 02） */
+
+  /* ---- 角丸 ---- */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-card: 24px;
+  --radius-pill: 999px;
+
+  /* ---- 影 ---- */
+  --shadow-card: 0 10px 30px rgba(31, 45, 90, 0.08);
+  --shadow-soft: 0 4px 14px rgba(31, 45, 90, 0.06);
+  --shadow-button: 0 4px 0 var(--color-yellow-dark);
+
+  /* ---- 動き ---- */
+  --transition: 0.25s ease;
+}
+
+@media (max-width: 1080px) {
+  :root {
+    --header-height: 72px;
+  }
+}
+@media (max-width: 600px) {
+  :root {
+    --header-height: 60px;
+  }
+}

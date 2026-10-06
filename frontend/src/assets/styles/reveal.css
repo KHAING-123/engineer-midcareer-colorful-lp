@@ -1,0 +1,69 @@
+/* ============================================================
+   Scroll Reveal（v-reveal）の見た目
+   ------------------------------------------------------------
+   ・html に .reveal-ready が付いているときだけ隠す（index.html で付与）。
+     JavaScript が動かない環境では最初から全て表示されます。
+   ・動かすのは opacity / transform のみ。
+   ・hover や浮遊アニメーションで transform を使う要素には付けず、
+     外側の要素（li など）に付けて競合を防いでいます。
+   ============================================================ */
+:root {
+  --reveal-y: 28px;         /* 下からの移動量 */
+  --reveal-x: 24px;         /* 横からの移動量（variant: left / right） */
+  --reveal-dur: 700ms;      /* 表示にかかる時間 */
+  --reveal-step: 100ms;     /* 並んだ要素の時間差 */
+  --reveal-base-scale: 1;   /* delay の倍率（SPで短く） */
+}
+@media (max-width: 767px) {
+  :root {
+    --reveal-y: 18px;
+    --reveal-x: 14px;
+    --reveal-dur: 600ms;
+    --reveal-step: 80ms;
+    --reveal-base-scale: 0.6;
+  }
+}
+
+.reveal-ready .reveal {
+  opacity: 0;
+  transition:
+    opacity var(--reveal-dur) ease,
+    transform var(--reveal-dur) cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: calc(var(--reveal-base, 0ms) * var(--reveal-base-scale) + var(--reveal-i, 0) * var(--reveal-step));
+}
+/* 位置も動かすタイプ（fade 以外）。fade は要素自身の transform（傾きなど）に一切触れない */
+.reveal-ready .reveal:not(.reveal--fade) {
+  transform: translate3d(0, var(--reveal-y), 0);
+}
+.reveal-ready .reveal.reveal--left {
+  transform: translate3d(calc(var(--reveal-x) * -1), 0, 0);
+}
+.reveal-ready .reveal.reveal--right {
+  transform: translate3d(var(--reveal-x), 0, 0);
+}
+/* 07 FLOW：STEP の時間差を少し短く（100 / 180 / 260 / 340 / 420ms） */
+.reveal-ready .reveal--flow {
+  --reveal-step: 80ms;
+}
+/* Final CTA：少しゆっくり */
+.reveal-ready .reveal--slow {
+  --reveal-y: 20px;
+  --reveal-dur: 850ms;
+}
+
+.reveal-ready .reveal.is-revealed {
+  opacity: 1;
+}
+.reveal-ready .reveal:not(.reveal--fade).is-revealed {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-ready .reveal {
+    opacity: 1 !important;
+    transition: none !important;
+  }
+  .reveal-ready .reveal:not(.reveal--fade) {
+    transform: none !important;
+  }
+}
