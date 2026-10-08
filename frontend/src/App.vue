@@ -11,12 +11,12 @@ import SelectionFlowSection from './components/lp/SelectionFlowSection.vue'
 import FinalCtaSection from './components/lp/FinalCtaSection.vue'
 import AppFooter from './components/lp/AppFooter.vue'
 import AmbientBackground from './components/common/AmbientBackground.vue'
-import PageOpening from './components/common/PageOpening.vue'
+import OpeningScreen from './components/common/OpeningScreen.vue'
 </script>
 
 <template>
-  <!-- ページを開いたときの紙がめくれる演出（不要になったらこの1行を消すだけ） -->
-  <PageOpening />
+  <!-- オープニング：ロゴ・英文 → 紙がめくれて Hero が現れる（不要になったらこの1行を消すだけ） -->
+  <OpeningScreen />
   <div class="lp-page">
     <a class="skip-link" href="#main">本文へスキップ</a>
     <AppHeader />

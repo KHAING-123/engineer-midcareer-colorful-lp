@@ -13,8 +13,13 @@
  * ・見た目は src/assets/styles/reveal.css で管理しています。
  */
 
+import { isOpeningHold, RELEASE_EVENT } from '../utils/opening.js'
+
 let observer = null
 const pending = new Set()
+// オープニングの紙が閉じている間は監視を始めない（紙の下で表示が終わってしまわないように）
+const held = new Set()
+let releaseListening = false
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -70,9 +75,25 @@ export const reveal = {
       return
     }
     pending.add(el)
+    if (isOpeningHold()) {
+      held.add(el)
+      if (!releaseListening) {
+        releaseListening = true
+        window.addEventListener(
+          RELEASE_EVENT,
+          () => {
+            held.forEach((e) => getObserver().observe(e))
+            held.clear()
+          },
+          { once: true },
+        )
+      }
+      return
+    }
     getObserver().observe(el)
   },
   beforeUnmount(el) {
+    held.delete(el)
     pending.delete(el)
     observer?.unobserve(el)
   },

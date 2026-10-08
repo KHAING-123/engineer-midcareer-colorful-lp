@@ -58,6 +58,20 @@ export const lpContent = {
    *  title はページの見出し(h1)として検索エンジン・読み上げソフト向けに使われます
    *  （画面上には表示されません。画像内の文字と同じ内容にしてください）。
    */
+  /*
+   * オープニング（ページを開いた直後、紙がめくれる前に表示）
+   *  lines：1行ずつ表示する英文（1文字ずつ表示されます）
+   *  keywords：下の小さな英字。accent は coral / blue / mint
+   */
+  opening: {
+    lines: ['YOUR EXPERIENCE.', 'YOUR NEXT FUTURE.'],
+    keywords: [
+      { label: 'AI', accent: 'coral' },
+      { label: 'CAREER', accent: 'blue' },
+      { label: 'GROWTH', accent: 'mint' },
+    ],
+  },
+
   hero: {
     title: '未経験から、エンジニアへ。PREAIで一緒に成長しよう。',
     imagePc: 'hero/hero-pc.png',
@@ -127,7 +141,7 @@ export const lpContent = {
   jobs: [
     {
       title: 'PM・PMO',
-      image: 'jobs/web-development.png',
+      image: 'jobs/work-pm-pmo.png',
       imageAlt: 'パソコン画面でWebアプリを開発しているイラスト',
       description: '大手企業のDX・ITプロジェクトに参画し、\n会議運営、進捗・課題管理、関係者との調整などを担当します。\n経験を積みながら、要件整理や顧客折衝、プロジェクト全体を動かすPM業務へと\nステップアップしていきます。',
       tags: ['Excel', 'PowerPoint', 'Teams', 'Slack','生成AI'],
@@ -135,7 +149,7 @@ export const lpContent = {
     },
     {
       title: 'AI・DXツール導入支援',
-      image: 'jobs/mobile-development.png',
+      image: 'jobs/work-ai-dx-support.png',
       imageAlt: 'スマートフォンアプリの画面を設計しているイラスト',
       description: '大手企業を中心に、生成AIや\n業務効率化ツールの導入・活用を支援します。\nお客様の業務や課題を整理し、ツールの選定・\n導入から、活用方法の検討、現場への\n定着までサポートします。',
       tags: ['Microsoft Copilot', 'Power Platform（Power Apps等）', 'ChatGPT', 'Claude','Gemini','NotebookLM'],
@@ -143,7 +157,7 @@ export const lpContent = {
     },
     {
       title: '業務自動化',
-      image: 'jobs/ai-data-development.png',
+      image: 'jobs/work-automation.png',
       imageAlt: 'グラフやAIのデータを分析しているイラスト',
       description: 'n8nやAIを活用し、これまで人が手作業で\n行っていた業務を自動化します。\n業務フローを整理し、AIや各種サービスを\n組み合わせながら、実際に動く仕組みを\nつくります。',
       tags: ['n8n', 'Claude Code', 'Codex', 'API連携'],
