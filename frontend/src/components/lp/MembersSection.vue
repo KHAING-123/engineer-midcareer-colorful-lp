@@ -3,18 +3,11 @@ import { ref } from 'vue'
 import { useHeadingReveal } from '../../composables/useHeadingReveal.js'
 import { lpContent } from '../../data/lpContent.js'
 import { img } from '../../utils/image.js'
-import MemberCard from './MemberCard.vue'
 
 const { membersSection: section, members } = lpContent
 
 // 見出しの \n は「幅が足りないときだけ改行する位置」として扱う（PCでは1行表示）
 const titleParts = section.title.split('\n')
-const labels = {
-  nameSuffix: section.nameSuffix,
-  ageUnit: section.ageUnit,
-  previousPrefix: section.previousPrefix,
-}
-
 // タイトル（01 / MEMBERS / 見出し）の Scroll Animation：左から1回だけ → その後に本文・カード・Note（共通処理）
 const heading = ref(null)
 const { stateClass } = useHeadingReveal(heading)
@@ -53,7 +46,7 @@ const { stateClass } = useHeadingReveal(heading)
     </div>
 
     <div class="lp-container members__grid">
-      <!-- 左：01 + 見出し + 説明 + 手書き風メッセージ -->
+      <!-- 見出し：01 + タイトル + 説明 -->
       <div class="members__intro">
         <!-- タイトルグループ（01 / MEMBERS / 見出し）：heading-reveal。本文はここに含めず v-reveal のまま -->
         <div ref="heading" class="members__head heading-reveal">
@@ -67,7 +60,6 @@ const { stateClass } = useHeadingReveal(heading)
           </div>
         </div>
 
-        <p v-if="section.handwritten" v-reveal="{ variant: 'fade', delay: 350 }" class="members__handwritten pre-line heading-reveal-content heading-reveal-content--note">{{ section.handwritten }}</p>
         <!-- PC（1024px〜）だけ：「いろんなバックグラウンド…」を表示しない代わりの葉っぱ -->
         <span class="members-pc-intro-leaves" aria-hidden="true">
           <img class="members-pc-intro-leaf members-pc-intro-leaf--1" :src="img('common/deco-leaf.svg')" alt="" />
@@ -77,29 +69,9 @@ const { stateClass } = useHeadingReveal(heading)
         </span>
       </div>
 
-      <!-- 右：メンバー3名 + 補助メッセージ -->
-      <div class="members__people">
-        <ul class="members__list">
-          <!-- 外側（li）：スクロール表示（タイトルの後に 1人ずつ） / 中：MemberCard の浮遊 -->
-          <li
-            v-for="(member, index) in members"
-            :key="member.name"
-            v-reveal="{ variant: 'fade' }"
-            class="member-reveal heading-reveal-content"
-            :style="{ '--mr-i': index }"
-          >
-            <MemberCard :member="member" :labels="labels" :index="index" />
-          </li>
-        </ul>
-
-        <p v-if="section.sideNote" v-reveal="{ delay: 450 }" class="members__side-note heading-reveal-content heading-reveal-content--note">
-          <span class="pre-line">{{ section.sideNote }}</span>
-        </p>
-      </div>
-
       <!--
         メンバー画像（member-01 → 02 → 03）を大きく縦に並べるギャラリー
-        SP（〜767px）と PC（1024px〜）で使用（Tablet では非表示＝従来のメンバーカード）。
+        SP・Tablet・PC のすべてで使用（Tablet は幅を絞って中央に置く）。
         画像の中に人物・プロフィールが含まれているため、文字は重ねない。
         レイヤーの分担（transform が競合しないように分離）
           .members-sp-card--reveal … スクロール表示（1枚ずつ・1回だけ）
@@ -107,7 +79,7 @@ const { stateClass } = useHeadingReveal(heading)
           .members-sp-card__frame  … 角丸・影・わずかな傾き・光
       -->
       <div class="members-sp-gallery">
-        <template v-for="(member, index) in members" :key="`sp-${member.name}`">
+        <template v-for="(member, index) in members" :key="`sp-${member.id}`">
           <div
             v-reveal="{ variant: 'fade' }"
             class="members-sp-card members-sp-card--reveal heading-reveal-content"
@@ -178,7 +150,6 @@ const { stateClass } = useHeadingReveal(heading)
 .members {
   --members-bg-top: #fffdf7;
   --members-bg-bottom: #fff8e8;
-  --members-hand-blue: #3a6db0;
   /* Note の浮遊量（SPで弱める） */
   --note-a-y: 10px;
   --note-b-y: 8px;
@@ -266,74 +237,6 @@ const { stateClass } = useHeadingReveal(heading)
   line-height: 1.95;
 }
 
-/* 左下の手書き風メッセージ（右カラムへつながる位置に） */
-.members__handwritten {
-  align-self: flex-end;
-  margin-top: clamp(28px, 4vw, 56px);
-  margin-right: clamp(0px, 3vw, 40px);
-  color: var(--members-hand-blue);
-  font-family: var(--font-heading);
-  font-size: 1.0625rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  line-height: 1.9;
-  transform: rotate(-9deg);
-  /* Note B：文字＋下線ごと、紙が少し浮いているように */
-  filter: drop-shadow(0 6px 10px rgba(31, 54, 105, 0.1));
-  animation: note-float-b 7.4s ease-in-out -2.5s infinite;
-}
-.members__handwritten::after {
-  content: '';
-  display: block;
-  width: 70%;
-  height: 8px;
-  margin-top: 2px;
-  border-bottom: 2px solid currentColor;
-  border-radius: 0 0 50% 50%;
-  opacity: 0.35;
-}
-
-/* ---------- 右：メンバー ---------- */
-.members__people {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 12px;
-  align-items: center;
-}
-.members__list {
-  display: grid;
-  gap: 14px;
-}
-/* PCだけ少しずらして自然な配置感に（1・2人目を右へ） */
-.members__list > li:nth-child(3n + 1),
-.members__list > li:nth-child(3n + 2) {
-  padding-left: clamp(0px, 3.2vw, 48px);
-}
-
-/* スクロール表示：1人ずつ、少し横＋下から（1回だけ。v-reveal の fade を使い、動きはここで指定） */
-.members {
-  --mr-x: 25px;
-}
-:global(.reveal-ready .members .member-reveal.reveal) {
-  transform: translate3d(calc(var(--mr-x) * -1), 30px, 0) scale(0.985);
-  transition:
-    opacity 0.75s ease,
-    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: calc(250ms + var(--mr-i, 0) * 120ms); /* 説明文の後に 0 / 120 / 240ms */
-}
-:global(.reveal-ready .members .member-reveal.reveal:nth-child(2n)) {
-  transform: translate3d(var(--mr-x), 30px, 0) scale(0.985);
-}
-:global(.reveal-ready .members.is-content-ready .member-reveal.reveal.is-revealed) {
-  transform: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  :global(.reveal-ready .members .member-reveal.reveal),
-  :global(.reveal-ready .members .member-reveal.reveal:nth-child(2n)) {
-    transform: none;
-  }
-}
-
 /* 右端：ピンクの丸の補助メッセージ */
 .members__side-note {
   position: relative;
@@ -386,24 +289,8 @@ const { stateClass } = useHeadingReveal(heading)
     rotate: var(--note-rot);
   }
 }
-@keyframes note-float-b {
-  0%,
-  100% {
-    translate: 0 0;
-    rotate: var(--note-rot);
-  }
-  40% {
-    translate: var(--note-x) calc(var(--note-b-y) * -1);
-    rotate: calc(var(--note-rot) * -1);
-  }
-  75% {
-    translate: calc(var(--note-x) * -0.7) calc(var(--note-b-y) * -0.45);
-    rotate: 0deg;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
-  .members__side-note,
-  .members__handwritten {
+  .members__side-note {
     animation: none;
   }
 }
@@ -491,19 +378,6 @@ const { stateClass } = useHeadingReveal(heading)
     grid-template-columns: 1fr;
     gap: 32px;
   }
-  .members__handwritten {
-    align-self: flex-start;
-    margin: 24px 0 0 clamp(80px, 12vw, 120px);
-  }
-  .members__people {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    gap: 24px;
-  }
-  .members__list {
-    width: 100%;
-    max-width: 600px;
-  }
   .members__side-note {
     width: 150px;
     margin-top: 0;
@@ -547,17 +421,6 @@ const { stateClass } = useHeadingReveal(heading)
   .members__lead {
     font-size: var(--fs-sm);
   }
-  /* 「いろんなバックグラウンドの仲間がいます！」は SP では表示しない（代わりに下の手書きメモ） */
-  .members__handwritten {
-    display: none;
-  }
-  .members {
-    --mr-x: 12px;
-  }
-  .members__list > li:nth-child(3n + 1),
-  .members__list > li:nth-child(3n + 2) {
-    padding-left: 0;
-  }
   .members__deco--dots {
     left: auto;
     right: 16px;
@@ -568,8 +431,8 @@ const { stateClass } = useHeadingReveal(heading)
     height: 80px;
   }
 }
-/* ================= SP（〜767px）だけ：メンバー画像ギャラリー ================= */
-/* Tablet（768〜1023px）では表示しない（画像も loading="lazy" のため読み込まれません）。SP と PC は下のメディアクエリで表示 */
+/* ================= SP・Tablet（〜1023px）：メンバー画像ギャラリー（縦並び） ================= */
+/* PC（1024px〜）は下のメディアクエリで横並びに上書き */
 .members-sp-gallery {
   display: none;
 }
@@ -582,11 +445,15 @@ const { stateClass } = useHeadingReveal(heading)
     font-size: 0.875rem;
     line-height: 1.8;
   }
-  /* PC 用のメンバーカード一覧は SP では使わない（画像ギャラリーに置き換え） */
-  .members__people {
-    display: none;
+}
+/* Tablet：画像が大きくなりすぎないよう幅を絞って中央に置く */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .members-sp-gallery {
+    max-width: 560px;
+    margin-inline: auto;
   }
-
+}
+@media (max-width: 1023px) {
   .members-sp-gallery {
     --sp-note-w: clamp(120px, 36vw, 156px); /* 「一歩ずつ…」の大きさ（320〜430px で約 120〜155px） */
     position: relative;
@@ -770,10 +637,6 @@ const { stateClass } = useHeadingReveal(heading)
     grid-template-columns: minmax(0, 1fr);
     gap: clamp(36px, 4vw, 64px);
   }
-  .members__people {
-    display: none; /* 従来のメンバーカード一覧は使わない */
-  }
-
   /* ---------- 見出し：01 の右に MEMBERS・2行の見出し、説明文はその下に中央揃え ---------- */
   .members__intro {
     position: relative;
@@ -810,10 +673,6 @@ const { stateClass } = useHeadingReveal(heading)
     max-width: none;
     margin-top: clamp(18px, 1.8vw, 26px);
     text-align: center;
-  }
-  /* 「いろんなバックグラウンドの仲間がいます！」は PC では表示しない（代わりに葉っぱ） */
-  .members__handwritten {
-    display: none;
   }
   .members-pc-intro-leaves {
     position: absolute;
@@ -1193,8 +1052,8 @@ const { stateClass } = useHeadingReveal(heading)
     --bg-out: 48px; /* PC：少し広めに（画像の外まで淡い色が広がる） */
   }
 }
-/* SP：装飾をコンパクトに（画像・文字にかからない・横にはみ出さない） */
-@media (max-width: 767px) {
+/* SP・Tablet：装飾をコンパクトに（画像・文字にかからない・横にはみ出さない） */
+@media (max-width: 1023px) {
   .members-premium-bg {
     --bg-out: 14px;
   }
@@ -1223,11 +1082,11 @@ const { stateClass } = useHeadingReveal(heading)
   }
 }
 
-/* ================= SP（〜767px）だけ：「一歩ずつ…」の周りの葉っぱ ================= */
+/* ================= SP・Tablet（〜1023px）：「一歩ずつ…」の周りの葉っぱ ================= */
 .members-sp-note-leaf {
   display: none;
 }
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .members-sp-note-leaf {
     --leaf-rotate: -18deg;
     position: absolute;

@@ -19,7 +19,7 @@ const { hero } = lpContent
     <div class="hero__frame">
       <picture class="hero__picture">
         <source media="(max-width: 767px)" :srcset="img(hero.imageSp)" width="1024" height="1536" />
-        <img class="hero__image" :src="img(hero.imagePc)" :alt="hero.alt" width="2048" height="768" fetchpriority="high" />
+        <img class="hero__image" :src="img(hero.imagePc)" :alt="hero.alt" width="2048" height="768" loading="eager" fetchpriority="high" />
       </picture>
 
       <!-- 漂う葉っぱ（装飾） -->

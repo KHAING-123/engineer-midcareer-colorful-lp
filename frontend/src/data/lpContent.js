@@ -85,45 +85,13 @@ export const lpContent = {
     label: 'MEMBERS',
     title: 'どんな人が\n働いている？',
     lead: 'PREAIには、さまざまな経験や強みを持ったメンバーが働いています。\nこれまで培ってきた経験を活かしながら、IT・AIという新しいスキルを身につけ、\nそれぞれのキャリアに挑戦しています。\n\n共通しているのは、\n新しいことを学び、自分の可能性を広げようとする姿勢です。',
-    note: '入社メンバーの約7割が\nIT未経験からのスタート！', // ※ 現在のデザインでは表示していません
-    handwritten: 'いろんな\nバックグラウンドの\n仲間がいます！', // 左側の手書き風メッセージ
     sideNote: '一歩ずつ、\nできることが\n増えていく。', // 右側のピンクの丸の中のメッセージ
-    nameSuffix: 'さん', // 名前のあとにつける文字（例：Y.Sさん）
-    ageUnit: '歳',
-    previousPrefix: '元', // 前職の前につける文字（例：元アパレル販売）
   },
-  /* メンバー：accent は人物の後ろの丸の色（'blue' / 'yellow' / 'green' / 'pink'） */
+  /* メンバー紹介画像（名前・年齢・コメントは画像内に含まれています）。id は一意の識別子 */
   members: [
-    {
-      name: 'Y.S',
-      age: 24,
-      image: 'members/member-01.png',
-      imageAlt: '笑顔の若手メンバー Y.Sさんのイラスト',
-      previousJob: 'アパレル販売',
-      currentRole: 'Webエンジニア',
-      comment: '最初は専門用語もわからなかったけど、先輩が一つずつ丁寧に教えてくれました！',
-      accent: 'blue',
-    },
-    {
-      name: 'K.T',
-      age: 26,
-      image: 'members/member-02.png',
-      imageAlt: 'メガネをかけたメンバー K.Tさんのイラスト',
-      previousJob: '飲食店スタッフ',
-      currentRole: 'モバイルアプリエンジニア',
-      comment: '自分が作ったアプリが動いた瞬間の感動は今でも忘れられません。',
-      accent: 'pink',
-    },
-    {
-      name: 'M.N',
-      age: 23,
-      image: 'members/member-03.png',
-      imageAlt: 'ショートヘアのメンバー M.Nさんのイラスト',
-      previousJob: '一般事務',
-      currentRole: 'データアナリスト',
-      comment: 'Excel作業が好きだった経験が、今のデータ分析の仕事に活きています。',
-      accent: 'green',
-    },
+    { id: 'member-01', image: 'members/member-01.png', imageAlt: 'メンバー紹介画像1：キャリアコンサルタント兼エンジニアのメンバー' },
+    { id: 'member-02', image: 'members/member-02.png', imageAlt: 'メンバー紹介画像2：台湾出身のエンジニア兼SNS担当のメンバー' },
+    { id: 'member-03', image: 'members/member-03.png', imageAlt: 'メンバー紹介画像3：エンジニア兼事務のメンバー' },
   ],
 
   /* ---------- 02 PREAIでの仕事 ---------- */
