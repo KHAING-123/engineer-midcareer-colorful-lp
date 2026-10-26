@@ -279,30 +279,42 @@ export const lpContent = {
     listTitle: '面接でお話しすること',
     /*
      * 「面接でお話しすること」（2×2で表示：左上 → 右上 → 左下 → 右下 の順）
-     *  title: 項目名（\n は「幅が足りないときだけ改行する位置」） / description: 説明文（\n で改行） / icon: アイコン画像 / accent: アイコンの後ろの丸の色（'green' / 'pink' / 'blue' / 'yellow'）
+     *  title: 項目名（\n は「幅が足りないときだけ改行する位置」） / items: 説明文（2項目の配列。1項目ずつチェックアイコン付きで表示） / icon: アイコン画像 / accent: アイコンの後ろの丸の色（'green' / 'pink' / 'blue' / 'yellow'）
      */
     topics: [
       {
         title: 'あなたらしさについて',
-        description: '社会人経験者向けに\n『これまでの経験・強み』\nについて話す内容へ。',
+        items: [
+          'これまで経験してきた仕事や、取り組んできたこと',
+          '自分の得意なことや、大切にしている考え方',
+        ],
         icon: 'icons/interview/interview-learning.svg',
         accent: 'green',
       },
       {
         title: 'チームでの働き方\nについて',
-        description: '『これまでどんな仕事・\n役割を経験してきたか』など、\n社会人経験を確認する内容へ。',
+        items: [
+          'これまで一緒に働いてきた人たちとの関わり方',
+          'チームで仕事を進めるうえで、大切にしていること',
+        ],
         icon: 'icons/interview/interview-career.svg',
         accent: 'pink',
       },
       {
         title: '仕事への向き合い方\nについて',
-        description: '『今後どんなキャリアを\n築きたいか／IT・AI領域で\n何をやってみたいか』を話す\n内容へ。',
+        items: [
+          'これから挑戦してみたいこと',
+          'IT・AIへの興味や、将来のキャリアについて',
+        ],
         icon: 'icons/interview/interview-idea.svg',
         accent: 'blue',
       },
       {
         title: '気になること・\n聞いてみたいこと',
-        description: '仕事内容・働き方・案件・\nキャリアなど、応募者側から\n自由に質問できる内容は残す。',
+        items: [
+          '仕事内容や、入社後の働き方について',
+          '研修・キャリア・勤務条件など、なんでもOK',
+        ],
         icon: 'icons/interview/interview-talk.svg',
         accent: 'yellow',
       },

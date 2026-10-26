@@ -163,7 +163,10 @@ const DOTS = 15
                 <span class="interview__topic-title"><span class="interview__topic-mark"><template v-for="(part, i) in topic.title.split('\n')" :key="i"><wbr v-if="i > 0" />{{ part }}</template></span></span>
                 <!-- タイトル下の細いライン（左 → 右へ伸びる・繰り返し）＋ 右端の小さなドット -->
                 <span class="interview__topic-line" aria-hidden="true"><span class="interview__topic-bar"></span><span class="interview__topic-dots"></span></span>
-                <span v-if="topic.description" class="interview__topic-desc pre-line">{{ topic.description }}</span>
+              </span>
+              <!-- 説明文：2項目（アイコン＋見出しの下・カード幅いっぱい）。左に線画のチェック丸（色はカードの色。CSS のみ・アニメーションなし） -->
+              <span v-if="topic.items?.length" class="interview__topic-desc" role="list">
+                <span v-for="item in topic.items" :key="item" class="interview__topic-item" role="listitem">{{ item }}</span>
               </span>
             </div>
           </li>
@@ -792,9 +795,11 @@ const DOTS = 15
 }
 .interview__topic-card {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr); /* 1段目：左アイコン / 右タイトル */
   align-items: center;
-  gap: clamp(12px, 1.2vw, 16px);
+  column-gap: clamp(12px, 1.2vw, 16px);
+  row-gap: 14px;
   width: 100%;
   padding: clamp(16px, 1.6vw, 22px) clamp(14px, 1.4vw, 20px);
   isolation: isolate;
@@ -916,7 +921,6 @@ const DOTS = 15
   display: flex;
   align-items: center;
   gap: 6px;
-  max-width: 220px;
   margin-top: 8px;
 }
 .interview__topic-bar {
@@ -956,14 +960,61 @@ const DOTS = 15
   0%, 30%, 100% { opacity: 0.45; }
   50%, 75% { opacity: 0.9; }
 }
-/* 項目の説明（通常の太さ・少し小さめ） */
+/* 項目の説明（通常の太さ・少し小さめ）：2項目を縦に並べ、各項目の先頭に線画のチェック丸 */
 .interview__topic-desc {
-  display: block;
-  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  grid-column: 1 / -1; /* アイコンの下も使って、カード幅いっぱいに */
+  gap: 14px;
   color: var(--color-navy-soft);
   font-size: 0.8125rem;
   font-weight: 400;
   line-height: 1.7;
+}
+.interview__topic-item {
+  position: relative;
+  display: block;
+  padding-left: calc(var(--chk) + 8px);
+  word-break: auto-phrase; /* 対応ブラウザでは文節の切れ目で折り返す */
+}
+.interview__topic-desc {
+  --chk: 16px; /* チェック丸の大きさ */
+}
+/* チェック丸（線画）：丸の枠 ＋ 細いチェックマーク。折り返しても各項目の先頭（1行目）に揃う */
+.interview__topic-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: calc((1.7em - var(--chk)) / 2);
+  box-sizing: border-box;
+  width: var(--chk);
+  height: var(--chk);
+  border: 1.3px solid var(--t-check, var(--t-line));
+  border-radius: 50%;
+}
+.interview__topic-item::after {
+  content: '';
+  position: absolute;
+  left: calc(var(--chk) * 0.3);
+  top: calc((1.7em - var(--chk)) / 2 + var(--chk) * 0.27);
+  box-sizing: border-box;
+  width: calc(var(--chk) * 0.4);
+  height: calc(var(--chk) * 0.22);
+  border-left: 1.3px solid var(--t-check, var(--t-line));
+  border-bottom: 1.3px solid var(--t-check, var(--t-line));
+  transform: rotate(-45deg);
+}
+/* チェックの色：各カードのテーマカラー（線の色より少し濃くして読みやすく） */
+.interview__topic.accent-green { --t-check: #3fae7a; }
+.interview__topic.accent-pink { --t-check: #e56f8e; }
+.interview__topic.accent-blue { --t-check: #5a9fe6; }
+.interview__topic.accent-yellow { --t-check: #d9a21b; }
+@media (max-width: 767px) {
+  .interview__topic-desc {
+    --chk: 18px;
+    gap: 14px;
+    font-size: 0.875rem;
+  }
 }
 /* PC 2列（右側の列が狭い幅）：文章の幅を確保するため、アイコン・余白を少しコンパクトに */
 @media (min-width: 1025px) {
@@ -971,7 +1022,7 @@ const DOTS = 15
     padding-inline: clamp(16px, 1.4vw, 20px);
   }
   .interview__topic-card {
-    gap: 12px;
+    column-gap: 12px;
     padding: 18px 14px;
   }
   .interview__topic-icon {
@@ -979,15 +1030,12 @@ const DOTS = 15
     height: 56px;
   }
 }
-.interview__topic-desc {
+.interview__topic-item {
   text-wrap: pretty; /* 最後の行が1〜2文字だけにならないように */
 }
-/* PC の狭め（1025〜1279px）：右側の列が狭く文章が細切れになるため、アイコンを上・文章を下に */
+/* PC の狭め（1025〜1279px）：アイコンを少し小さく */
 @media (min-width: 1025px) and (max-width: 1279px) {
   .interview__topic-card {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
     padding: 18px 16px 20px;
   }
   .interview__topic-icon {
@@ -1302,7 +1350,7 @@ const DOTS = 15
     padding: 5px 16px;
   }
   .interview__topic-card {
-    gap: 12px;
+    column-gap: 12px;
     padding: 16px 14px;
     border-radius: 20px;
   }
