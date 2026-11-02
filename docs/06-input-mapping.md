@@ -7,7 +7,7 @@
 - generate-colorful-lp Skill が反映できるのは、7 Section（01〜07）の `title`・`lead`、計14項目（「9.」に一覧）。
 - 状態の区別（「9.」も参照）:
   - **Skill に対応済み**: `SKILL.md` に14項目の読み取り・照合・反映の手順が書かれている。
-  - **実行テスト済み**: Skill を実際に実行して確認した。14項目版は、変更0件と14項目変更の2パターンで実行テスト済み（結果は `docs/05-generation-test-result.md` の 8・9）。不正な Input による停止動作は未実施。
+  - **実行テスト済み**: Skill を実際に実行して確認した。14項目版は、変更0件と14項目変更の2パターンで実行テスト済み（結果は `docs/05-generation-test-result.md` の 8・9）。停止動作は、2ケース（空の `jobsSection.title`、`jobs[0].description` の変更）だけ実行テスト済み（結果は `docs/08-input-validation-test-result.md`）。それ以外の不正 Input と引数検証は未実施。この停止は Skill の指示に従った AI の判断であり、プログラムによる機械的な強制ではない。
 
 ## 確認方法と確認状況
 - 「使用」欄は、`frontend/src/components/lp/` と `components/common/` の該当 Component を読んで確認した（コード確認済み）。
@@ -361,7 +361,10 @@ generate-colorful-lp Skill は、7 Section の `title`・`lead`、計14項目の
 | 状態 | 内容 |
 |---|---|
 | Skill に対応済み | `SKILL.md` に14項目の手順がある。 |
-| 実行テスト済み | 14項目版を2パターンで実行した。変更0件（docs/02、出力先 `output/colorful-14fields-baseline/`）と、14項目すべてに「【検証用】」を付けた変更（docs/07、出力先 `output/colorful-14fields-test/`）。どちらも生成・`npm ci`・Build・起動が成功した。変更版は Node の比較で、変更キーが指定の14項目と完全一致した。**未実施**：空文字・空白だけ・見出しだけ・単独の CR・範囲外の差分などによる停止動作。 |
+| 実行テスト済み | 14項目版を2パターンで実行した。変更0件（docs/02、出力先 `output/colorful-14fields-baseline/`）と、14項目すべてに「【検証用】」を付けた変更（docs/07、出力先 `output/colorful-14fields-test/`）。どちらも生成・`npm ci`・Build・起動が成功した。変更版は Node の比較で、変更キーが指定の14項目と完全一致した。|
+| 実行テスト済み（停止動作） | 2ケースで、Skill が生成前に停止した（`docs/08-input-validation-test-result.md`）。①`jobsSection.title` が空（`docs/tests/empty-title.md`）：手順4-1で「判断不能」（空）として停止。②`jobs[0].description` に変更あり（`docs/tests/unsupported-card.md`）：14項目は全て「同じ」だが、手順4-3で対応範囲外の差分として停止。どちらも出力先（`output/test-reject-empty-title`、`output/test-reject-unsupported-card`）は作成されず、複製・`npm ci`・Build・サーバー起動へ進んでいない。元の `frontend/`・既存出力・docs・ZIP は変更なし。 |
+| 停止動作の性質 | この停止は、AI が `SKILL.md` の手順を読んで実行した結果であり（**Skill の指示による停止**）、プログラム（スクリプトやフック）が生成を機械的に止めたものではない（**機械的な強制ではない**）。2回は手順どおりに停止したが、毎回同じになる保証はこの結果だけでは出せない。Skill は `disable-model-invocation: true` のため、AI は呼び出せず、ユーザーが `/generate-colorful-lp` で実行した。 |
+| 停止動作の未実施 | 見出しだけで値（コードブロック）がない、空白・タブ・全角スペースだけの値、「見出し：」の後ろが空の1行書式、単独の CR、CRLF、コードブロックの閉じ忘れ、同じ項目の重複、空白だけの差、`jobs[0].description` 以外の範囲外の差分（番号・ラベル・タグ・URL・画像パス・色・補足メッセージなど）、手順1の引数検証（出力先が既に存在する、`output/` 外・`..` を含む、Input が `docs/archive/` 配下・ZIP など）。 |
 | ブラウザ確認済み | 14項目変更版（「【検証用】」付き）について、ユーザーが確認済み：14項目の表示、PC、SP 390px、SP 375px、Opening・メニュー・ナビ（すべて OK）。**未確認**：実際の案件の文章での見え方、画像内テキストと alt の一致、optimized WebP と元画像の一致、アンカー位置、画像 width/height のずれの影響。 |
 
 ### 9.3 14項目の外（文字列の置き換えだけでは対応できない。拡張する場合は別途方針を決める）
@@ -374,7 +377,9 @@ generate-colorful-lp Skill は、7 Section の `title`・`lead`、計14項目の
 - Component 内の直接記載（「8.」）
 
 ## 10. 未確認事項
-- 14項目版の Skill の、不正な Input（空文字・空白だけ・見出しだけ・単独の CR・範囲外の差分）による停止動作は、実行テスト未実施。
+- 停止動作の実行テスト済みは2ケースだけ：`jobsSection.title` が空（手順4-1で停止）、`jobs[0].description` に変更あり（手順4-3で停止）。どちらも出力先は作成されず、`npm ci`・Build・サーバー起動へ進んでいない（`docs/08-input-validation-test-result.md`）。
+- 上の停止は、Skill の指示に従った AI の判断であり、プログラムによる機械的な強制ではない。毎回同じになる保証はない。
+- 次は停止動作が未実施：見出しだけで値がない、空白だけの値、「見出し：」の後ろが空の1行書式、単独の CR、CRLF、閉じ忘れ、項目の重複、空白だけの差、`jobs[0].description` 以外の範囲外の差分、手順1の引数検証。
 - 「【検証用】」を付けた14項目の画面上の見え方（PC、SP 390px・375px、Opening・メニュー・ナビ）は、ユーザーが確認済み。実際の案件の文章（長さ・行数が異なる）での折り返し・はみ出しは、ブラウザで未確認。
 - `membersSection.sideNote` の表示位置（コメントと実装の差）は、ブラウザで未確認。
 - `supportItems[].description` の `\n` が画面でどう表示されるかは、ブラウザで未確認。
